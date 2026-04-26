@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Kayo vs The Siren Monster</title>
+  <style>
+    :root {
+      --night:#090b1f;
+      --city:#151933;
+      --gold:#ffd166;
+      --blue:#6ecbff;
+      --red:#ff4d6d;
+      --green:#69f0ae;
+      --white:#fff9e8;
+    }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow: hidden;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--white);
+      background: radial-gradient(circle at top, #20254f, var(--night));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+    }
+    .wrap {
+      width: min(96vw, 520px);
+      text-align: center;
+    }
+    h1 {
+      color: var(--gold);
+      font-size: clamp(24px, 7vw, 38px);
+      margin: 4px 0 4px;
+      text-shadow: 0 3px 14px rgba(255,209,102,.25);
+    }
+    .subtitle {
+      opacity: .9;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+    .panel {
+      background: rgba(0,0,0,.28);
+      border: 2px solid rgba(255,209,102,.75);
+      border-radius: 22px;
+      padding: 12px;
+      box-shadow: 0 18px 45px rgba(0,0,0,.35);
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+      color: var(--gold);
+      font-weight: bold;
+    }
+    .badge {
+      flex: 1;
+      border-radius: 999px;
+      padding: 8px 8px;
+      border: 1px solid rgba(255,209,102,.35);
+      background: rgba(255,255,255,.08);
+      font-size: 14px;
+    }
+    canvas {
+      width: 100%;
+      aspect-ratio: 1/1;
+      display: block;
+      border: 3px solid var(--gold);
+      border-radius: 18px;
+      background: #0c1028;
+      touch-action: none;
+    }
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin-top: 12px;
+      user-select: none;
+    }
+    button {
+      border: 0;
+      border-radius: 18px;
+      padding: 14px 10px;
+      font-size: 22px;
+      font-weight: 900;
+      color: #1c1000;
+      background: linear-gradient(180deg, #ffe29a, #d99b25);
+      box-shadow: 0 6px 0 #7a4b00;
+      cursor: pointer;
+    }
+    button:active {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0 #7a4b00;
+    }
+    .empty { visibility: hidden; }
+    .smallBtns {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .smallBtns button {
+      flex: 1;
+      font-size: 15px;
+      padding: 12px 8px;
+      border-radius: 14px;
+      box-shadow: 0 5px 0 #7a4b00;
+    }
+    .message {
+      min-height: 24px;
+      margin-top: 10px;
+      color: var(--gold);
+      font-weight: bold;
+    }
+    .footer {
+      margin-top: 8px;
+      opacity: .7;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🚨 Kayo vs Siren Monster</h1>
+  <div class="subtitle">Collect golden stars, save the city, and don’t let the siren monster catch you!</div>
+  <div class="panel">
+    <div class="topbar">
+      <div class="badge">Hero: Kayo</div>
+      <div class="badge">Stars: <span id="score">0</span></div>
+      <div class="badge">Best: <span id="best">0</span></div>
+    </div>
+    <canvas id="game" width="420" height="420"></canvas>
+
+    <div class="controls">
+      <div class="empty"><button>•</button></div>
+      <button onclick="moveHero(0,-1)">▲</button>
+      <div class="empty"><button>•</button></div>
+      <button onclick="moveHero(-1,0)">◀</button>
+      <button onclick="startGame()">▶</button>
+      <button onclick="moveHero(1,0)">▶</button>
+      <div class="empty"><button>•</button></div>
+      <button onclick="moveHero(0,1)">▼</button>
+      <div class="empty"><button>•</button></div>
+    </div>
+
+    <div class="smallBtns">
+      <button onclick="startGame()">Start</button>
+      <button onclick="restart()">Restart</button>
+      <button onclick="safeMode()">Safe Mode</button>
+    </div>
+
+    <div class="message" id="message">Kayo, press Start and save the city!</div>
+  </div>
+  <div class="footer">Made from Kayo’s imagination by Birra + ChatGPT</div>
+</div>
+
+<script>
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+const scoreEl = document.getElementById('score');
+const bestEl = document.getElementById('best');
+const msgEl = document.getElementById('message');
+
+const grid = 14;
+const tile = canvas.width / grid;
+
+let hero = {x: 2, y: 11};
+let monster = {x: 11, y: 2};
+let star = {x: 7, y: 7};
+let score = 0;
+let best = Number(localStorage.getItem('kayo_siren_best') || 0);
+let running = false;
+let timer = null;
+let tick = 0;
+let monsterSleep = false;
+
+bestEl.textContent = best;
+
+function drawCity() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  // sky
+  const sky = ctx.createLinearGradient(0, 0, 0, canvas.height);
+  sky.addColorStop(0, '#111846');
+  sky.addColorStop(1, '#060817');
+  ctx.fillStyle = sky;
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+
+  // moon
+  ctx.fillStyle = '#fff2a8';
+  ctx.beginPath();
+  ctx.arc(355, 55, 24, 0, Math.PI*2);
+  ctx.fill();
+
+  // grid street
+  ctx.strokeStyle = 'rgba(255,255,255,.06)';
+  for (let i=0;i<=grid;i++) {
+    ctx.beginPath();
+    ctx.moveTo(i*tile,0); ctx.lineTo(i*tile,canvas.height); ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(0,i*tile); ctx.lineTo(canvas.width,i*tile); ctx.stroke();
+  }
+
+  // buildings
+  for (let i=0; i<7; i++) {
+    const x = i * 62;
+    const h = 70 + (i%3)*26;
+    ctx.fillStyle = i%2 ? '#161b3b' : '#202858';
+    ctx.fillRect(x, canvas.height-h, 52, h);
+    ctx.fillStyle = '#ffd166';
+    for (let wx=x+9; wx<x+45; wx+=18) {
+      for (let wy=canvas.height-h+12; wy<canvas.height-12; wy+=24) {
+        if ((wx+wy+i) % 3 !== 0) ctx.fillRect(wx, wy, 7, 9);
+      }
+    }
+  }
+}
+
+function drawStar() {
+  ctx.save();
+  ctx.translate(star.x*tile + tile/2, star.y*tile + tile/2);
+  ctx.fillStyle = '#ffd166';
+  ctx.beginPath();
+  for (let i=0;i<10;i++) {
+    const r = i%2===0 ? tile*.38 : tile*.17;
+    const a = Math.PI/5*i - Math.PI/2;
+    ctx.lineTo(Math.cos(a)*r, Math.sin(a)*r);
+  }
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+}
+
+function drawHero() {
+  const cx = hero.x*tile + tile/2;
+  const cy = hero.y*tile + tile/2;
+
+  ctx.fillStyle = '#6ecbff';
+  ctx.beginPath();
+  ctx.arc(cx, cy, tile*.36, 0, Math.PI*2);
+  ctx.fill();
+
+  ctx.fillStyle = '#fff9e8';
+  ctx.beginPath();
+  ctx.arc(cx-6, cy-5, 3, 0, Math.PI*2);
+  ctx.arc(cx+6, cy-5, 3, 0, Math.PI*2);
+  ctx.fill();
+
+  ctx.fillStyle = '#111';
+  ctx.beginPath();
+  ctx.arc(cx-6, cy-5, 1.5, 0, Math.PI*2);
+  ctx.arc(cx+6, cy-5, 1.5, 0, Math.PI*2);
+  ctx.fill();
+
+  ctx.fillStyle = '#ffd166';
+  ctx.font = 'bold 13px Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText('KAYO', cx, cy + tile*.62);
+}
+
+function drawMonster() {
+  const cx = monster.x*tile + tile/2;
+  const cy = monster.y*tile + tile/2;
+
+  ctx.fillStyle = monsterSleep ? '#7f8c8d' : '#ff4d6d';
+  ctx.beginPath();
+  ctx.arc(cx, cy, tile*.38, 0, Math.PI*2);
+  ctx.fill();
+
+  // siren horns
+  ctx.fillStyle = monsterSleep ? '#bdc3c7' : '#ff9f1c';
+  ctx.beginPath();
+  ctx.moveTo(cx-8, cy-13); ctx.lineTo(cx-22, cy-27); ctx.lineTo(cx-4, cy-20); ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(cx+8, cy-13); ctx.lineTo(cx+22, cy-27); ctx.lineTo(cx+4, cy-20); ctx.fill();
+
+  // sound waves
+  if (!monsterSleep) {
+    ctx.strokeStyle = 'rgba(255,77,109,.75)';
+    ctx.lineWidth = 3;
+    for (let r=18; r<=34; r+=8) {
+      ctx.beginPath();
+      ctx.arc(cx, cy, r + (tick%8), 0.2, 1.2);
+      ctx.stroke();
+    }
+  }
+
+  ctx.fillStyle = '#111';
+  ctx.fillRect(cx-12, cy-5, 7, 7);
+  ctx.fillRect(cx+5, cy-5, 7, 7);
+
+  ctx.fillStyle = '#fff';
+  ctx.font = 'bold 12px Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText(monsterSleep ? 'NAP' : 'SIREN', cx, cy + tile*.65);
+}
+
+function draw() {
+  drawCity();
+  drawStar();
+  drawHero();
+  drawMonster();
+}
+
+function randomCell() {
+  return {x: Math.floor(Math.random()*grid), y: Math.floor(Math.random()*grid)};
+}
+
+function newStar() {
+  do {
+    star = randomCell();
+  } while ((star.x === hero.x && star.y === hero.y) || (star.x === monster.x && star.y === monster.y));
+}
+
+function moveHero(dx, dy) {
+  if (!running) startGame();
+  hero.x = Math.max(0, Math.min(grid-1, hero.x + dx));
+  hero.y = Math.max(0, Math.min(grid-1, hero.y + dy));
+  checkStar();
+  checkCaught();
+  draw();
+}
+
+function monsterMove() {
+  if (monsterSleep) return;
+  const dx = hero.x - monster.x;
+  const dy = hero.y - monster.y;
+  if (Math.abs(dx) > Math.abs(dy)) monster.x += Math.sign(dx);
+  else monster.y += Math.sign(dy);
+}
+
+function checkStar() {
+  if (hero.x === star.x && hero.y === star.y) {
+    score++;
+    scoreEl.textContent = score;
+    msgEl.textContent = 'Good job Kayo! You saved ' + score + ' stars!';
+    if (score > best) {
+      best = score;
+      localStorage.setItem('kayo_siren_best', best);
+      bestEl.textContent = best;
+    }
+    if (score % 5 === 0) {
+      monsterSleep = true;
+      msgEl.textContent = 'Power up! Siren Monster is sleeping!';
+      setTimeout(() => { monsterSleep = false; }, 2500);
+    }
+    newStar();
+  }
+}
+
+function checkCaught() {
+  if (hero.x === monster.x && hero.y === monster.y) {
+    clearInterval(timer);
+    running = false;
+    msgEl.textContent = 'Oh no! Siren Monster found Kayo. Press Restart!';
+  }
+}
+
+function loop() {
+  tick++;
+  if (tick % 3 === 0) {
+    monsterMove();
+    checkCaught();
+  }
+  draw();
+}
+
+function startGame() {
+  if (running) return;
+  running = true;
+  msgEl.textContent = 'Run Kayo! Get the golden stars!';
+  clearInterval(timer);
+  timer = setInterval(loop, 170);
+}
+
+function restart() {
+  clearInterval(timer);
+  hero = {x: 2, y: 11};
+  monster = {x: 11, y: 2};
+  score = 0;
+  tick = 0;
+  monsterSleep = false;
+  scoreEl.textContent = score;
+  newStar();
+  running = false;
+  msgEl.textContent = 'Kayo, press Start and save the city!';
+  draw();
+}
+
+function safeMode() {
+  monsterSleep = true;
+  msgEl.textContent = 'Safe Mode: Siren Monster is sleeping for a little bit.';
+  setTimeout(() => { monsterSleep = false; }, 6000);
+  draw();
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowUp') moveHero(0,-1);
+  if (e.key === 'ArrowDown') moveHero(0,1);
+  if (e.key === 'ArrowLeft') moveHero(-1,0);
+  if (e.key === 'ArrowRight') moveHero(1,0);
+});
+
+let sx=0, sy=0;
+canvas.addEventListener('touchstart', e => {
+  const t = e.touches[0]; sx = t.clientX; sy = t.clientY;
+}, {passive:true});
+
+canvas.addEventListener('touchend', e => {
+  const t = e.changedTouches[0];
+  const dx = t.clientX - sx;
+  const dy = t.clientY - sy;
+  if (Math.abs(dx) > Math.abs(dy)) {
+    if (dx > 18) moveHero(1,0);
+    if (dx < -18) moveHero(-1,0);
+  } else {
+    if (dy > 18) moveHero(0,1);
+    if (dy < -18) moveHero(0,-1);
+  }
+}, {passive:true});
+
+restart();
+</script>
+</body>
+</html>
