@@ -502,39 +502,5 @@ img { max-width: 100%; display: block; }
 }
 @media (max-width: 480px) {
   .site-nav a:nth-child(3),
-  .site-nav a:nth-child(4),
-  .site-nav a:nth-child(5) { display: none; }
-}
-
-/* ───── Tester Banner ───── */
-.tester-banner {
-  background: linear-gradient(90deg, #1a0800, #231000, #1a0800);
-  border-top: 1px solid rgba(195, 154, 74, 0.35);
-  border-bottom: 1px solid rgba(195, 154, 74, 0.35);
-  padding: 18px 28px;
-}
-.tester-banner-inner {
-  max-width: var(--max-w);
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-.tester-banner-text {
-  color: var(--text-soft);
-  font-size: 0.97rem;
-  line-height: 1.5;
-}
-.tester-banner-text strong {
-  color: var(--gold-light);
-}
-.btn-sm {
-  padding: 10px 20px;
-  font-size: 0.9rem;
-  white-space: nowrap;
-}
-@media (max-width: 600px) {
-  .tester-banner-inner { flex-direction: column; align-items: flex-start; }
+  .site-nav a:nth-child(4) { display: none; } /* keep Home/About/Privacy visible */
 }
