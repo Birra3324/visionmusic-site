@@ -508,6 +508,50 @@ img { max-width: 100%; display: block; }
   .site-nav a:nth-child(5) { display: none; }
 }
 
+/* ───── Updates List ───── */
+.updates-list {
+  margin-top: 32px;
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+.update-item {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-l);
+  padding: 22px 24px;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+.update-item:hover {
+  border-color: rgba(195, 154, 74, 0.45);
+  transform: translateY(-2px);
+}
+.update-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background: rgba(195, 154, 74, 0.18);
+  color: var(--gold);
+  margin-bottom: 10px;
+}
+.update-item h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin: 0 0 6px;
+  color: var(--text);
+}
+.update-item p {
+  color: var(--text-soft);
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
 /* ───── Tester Banner ───── */
 .tester-banner {
   background: linear-gradient(90deg, #1a0800, #231000, #1a0800);
