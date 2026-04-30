@@ -408,6 +408,8 @@ img { max-width: 100%; display: block; }
 .footer-nav a { color: var(--text-soft); font-size: 0.92rem; }
 .footer-nav a:hover { color: var(--text); }
 .footer-copy { color: var(--text-soft); font-size: 0.85rem; margin: 0; text-align: right; }
+.footer-tagline { color: var(--text-dim); font-size: 0.8rem; margin: 8px 0 0; text-align: right; font-style: italic; }
+@media (max-width: 720px) { .footer-tagline { text-align: center; } }
 
 /* ───── Legal page ───── */
 .legal-main { padding: 60px 28px 40px; }
