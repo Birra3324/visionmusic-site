@@ -21,9 +21,9 @@ function fmt(s){if(isNaN(s))return"0:00";const m=Math.floor(s/60);const sec=Math
 
 function loadTrack(i){if(i<0||i>=queue.length)return;currentIndex=i;const t=queue[i];audio.src=t.audio;$("pcover").src=t.cover;$("ptitle").textContent=t.title;$("partist").textContent=t.artist;document.title=`${t.title} · ${t.artist} — Vision Music`;updateQueue();}
 
-function playTrack(i){loadTrack(i);audio.play().then(()=>{isPlaying=true;updatePlayBtn();}).catch(()=>toast("Preview coming soon"));}
+function playTrack(i){loadTrack(i);audio.play().then(()=>{isPlaying=true;updatePlayBtn();}).catch(err=>{console.error('Play error:',err);toast("Click play to start audio");});}
 
-function togglePlay(){if(!audio.src)loadTrack(0);if(isPlaying){audio.pause();isPlaying=false;}else{audio.play().then(()=>{isPlaying=true;}).catch(()=>toast("Preview coming soon"));}updatePlayBtn();}
+function togglePlay(){if(!audio.src)loadTrack(0);if(isPlaying){audio.pause();isPlaying=false;}else{audio.play().then(()=>{isPlaying=true;updatePlayBtn();}).catch(err=>{console.error('Play error:',err);toast("Tap play again to start");});}updatePlayBtn();}
 
 function updatePlayBtn(){$("playBtn").innerHTML=isPlaying?'<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>':'<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';}
 
@@ -40,7 +40,7 @@ function toggleQueue(){$("qpanel").classList.toggle("open");renderQueue();}
 function renderQueue(){$("qlist").innerHTML=queue.map((t,i)=>`<div class="qi ${i===currentIndex?'qa':''}" data-i="${i}"><img src="${t.cover}" class="qthumb"><div class="qinfo"><div class="qt">${t.title}</div><div class="qa2">${t.artist}</div></div>${i===currentIndex?'<span class="qp">▶</span>':''}</div>`).join("";document.querySelectorAll(".qi").forEach(el=>el.addEventListener("click",()=>playTrack(parseInt(el.dataset.i))));}
 function updateQueue(){renderQueue();}
 
-function renderTracks(){const f=activeTab==="All"?TRACKS:TRACKS.filter(t=>t.tab===activeTab);$("tgrid").innerHTML=f.map((t,i)=>`<article class="tc" data-i="${TRACKS.indexOf(t)}"><div class="tcw"><img src="${t.cover}" alt="${t.title}" class="tcov"><button class="tpb" aria-label="Play ${t.title}"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button></div><h3 class="tt">${t.title}</h3><p class="ta">${t.artist}</p></article>`).join("");document.querySelectorAll(".tc").forEach(c=>c.addEventListener("click",e=>{if(e.target.closest(".tpb"))playTrack(parseInt(c.dataset.i));}));}
+function renderTracks(){const f=activeTab==="All"?TRACKS:TRACKS.filter(t=>t.tab===activeTab);$("tgrid").innerHTML=f.map((t,i)=>`<article class="tc" data-i="${TRACKS.indexOf(t)}"><div class="tcw"><img src="${t.cover}" alt="${t.title}" class="tcov"><button class="tpb" aria-label="Play ${t.title}"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button></div><h3 class="tt">${t.title}</h3><p class="ta">${t.artist}</p></article>`).join("");document.querySelectorAll(".tc").forEach(c=>c.addEventListener("click",e=>{playTrack(parseInt(c.dataset.i));}));}
 
 function setTab(n){activeTab=n;document.querySelectorAll(".tb").forEach(b=>b.classList.toggle("tba",b.dataset.tab===n));renderTracks();}
 
