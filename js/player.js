@@ -1,4 +1,4 @@
-const TRACKS=[
+const FALLBACK_TRACKS=[
 {id:"markato",title:"Markato",artist:"Ali Birra",cover:"assets/covers/ali-birra.jpg",audio:"assets/audio/markato.mp3",tab:"Popular"},
 {id:"hirphaa",title:"Hirphaa",artist:"Hirphaa Gaanfuree",cover:"assets/covers/default.png",audio:"assets/audio/hirphaa.mp3",tab:"Popular"},
 {id:"yosan",title:"3Obsaa",artist:"Yosan Getahun",cover:"assets/covers/yosan-getahun.jpg",audio:"assets/audio/yosan_getahun.mp3",tab:"Recently"},
@@ -9,6 +9,8 @@ const TRACKS=[
 {id:"gumgume",title:"Gumgume",artist:"Andualem Gosa",cover:"assets/covers/andualem-gosa.jpg",audio:"assets/audio/gungume.mp3",tab:"Popular"},
 {id:"daraara",title:"Daraara Laga",artist:"Ali Birra",cover:"assets/covers/ali-birra.jpg",audio:"assets/audio/daraara-lagaa.mp3",tab:"Similar"}
 ];
+
+let TRACKS=[...FALLBACK_TRACKS];
 
 let currentIndex=0,isPlaying=false,isShuffle=false,repeatMode=0,queue=[...TRACKS],activeTab="All";
 const audio=new Audio();audio.preload="metadata";
@@ -30,7 +32,7 @@ function prevTrack(){if(audio.currentTime>3){audio.currentTime=0;return;}current
 function toggleShuffle(){isShuffle=!isShuffle;$("shuffleBtn").classList.toggle("active",isShuffle);}
 function cycleRepeat(){repeatMode=(repeatMode+1)%3;$("repeatBtn").innerHTML=repeatMode===2?'<span>↻₁</span>':'<span>↻</span>';$("repeatBtn").classList.toggle("active",repeatMode!==0);}
 
-function updateProgress(){if(!audio.duration)return;$("pbar").style.width=(audio.currentTime/audio.duration*100)+"%";$("ctime").textContent=fmt(audio.currentTime);$("tdur").textContent=fmt(audio.duration);}
+function updateProgress(){if(!audio.duration)return;$("pbar2").style.width=(audio.currentTime/audio.duration*100)+"%";$("ctime").textContent=fmt(audio.currentTime);$("tdur").textContent=fmt(audio.duration);}
 function seek(e){const r=$("pcont").getBoundingClientRect();audio.currentTime=((e.clientX-r.left)/r.width)*audio.duration;}
 function setVolume(v){audio.volume=v;}
 
@@ -59,4 +61,6 @@ audio.addEventListener("loadedmetadata",updateProgress);
 document.querySelectorAll(".tb").forEach(b=>b.addEventListener("click",()=>setTab(b.dataset.tab)));
 document.addEventListener("keydown",e=>{if(e.code==="Space"&&e.target.tagName!=="INPUT"){e.preventDefault();togglePlay();}if(e.code==="ArrowRight"&&e.ctrlKey)nextTrack();if(e.code==="ArrowLeft"&&e.ctrlKey)prevTrack();});
 
-renderTracks();loadTrack(0);updatePlayBtn();
+async function loadTracks(){try{const r=await fetch('data/songs.json');if(!r.ok)throw new Error('HTTP '+r.status);const data=await r.json();if(Array.isArray(data)&&data.length>0){TRACKS=data;queue=[...TRACKS];}}catch(e){console.warn('Using fallback tracks:',e.message);}}
+
+loadTracks().then(()=>{renderTracks();loadTrack(0);updatePlayBtn();});

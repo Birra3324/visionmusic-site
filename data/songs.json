@@ -1,0 +1,74 @@
+[
+  {
+    "id": "markato",
+    "title": "Markato",
+    "artist": "Ali Birra",
+    "cover": "assets/covers/ali-birra.jpg",
+    "audio": "assets/audio/markato.mp3",
+    "tab": "Popular"
+  },
+  {
+    "id": "hirphaa",
+    "title": "Hirphaa",
+    "artist": "Hirphaa Gaanfuree",
+    "cover": "assets/covers/default.png",
+    "audio": "assets/audio/hirphaa.mp3",
+    "tab": "Popular"
+  },
+  {
+    "id": "yosan",
+    "title": "3Obsaa",
+    "artist": "Yosan Getahun",
+    "cover": "assets/covers/yosan-getahun.jpg",
+    "audio": "assets/audio/yosan_getahun.mp3",
+    "tab": "Recently"
+  },
+  {
+    "id": "lagaa",
+    "title": "Lagaa",
+    "artist": "Davo",
+    "cover": "assets/covers/davo.jpg",
+    "audio": "assets/audio/lagaa.mp3",
+    "tab": "Trending"
+  },
+  {
+    "id": "shagoye",
+    "title": "Marartuu",
+    "artist": "Shukri Jamal",
+    "cover": "assets/covers/shukri-jamal.jpg",
+    "audio": "assets/audio/shagoye.mp3",
+    "tab": "Similar"
+  },
+  {
+    "id": "kuyubisaa",
+    "title": "Kuyubisaa",
+    "artist": "Asanti",
+    "cover": "assets/covers/asanti.jpg",
+    "audio": "assets/audio/kuyubisaa.mp3",
+    "tab": "Trending"
+  },
+  {
+    "id": "alibiyyanqabaa",
+    "title": "Alibiyyanqabaa",
+    "artist": "Naaima Abdurahman",
+    "cover": "assets/covers/naaima-abdurahman.jpg",
+    "audio": "assets/audio/alibiyyanqabaa.mp3",
+    "tab": "Recently"
+  },
+  {
+    "id": "gumgume",
+    "title": "Gumgume",
+    "artist": "Andualem Gosa",
+    "cover": "assets/covers/andualem-gosa.jpg",
+    "audio": "assets/audio/gungume.mp3",
+    "tab": "Popular"
+  },
+  {
+    "id": "daraara",
+    "title": "Daraara Laga",
+    "artist": "Ali Birra",
+    "cover": "assets/covers/ali-birra.jpg",
+    "audio": "assets/audio/daraara-lagaa.mp3",
+    "tab": "Similar"
+  }
+]
