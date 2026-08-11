@@ -1,6 +1,6 @@
 # Vision Music — Marketing Site
 
-Static landing site for the Vision Music Android app. Branding and copy are
+Static landing site for the Vision Music Android and iOS app. Branding and copy are
 pulled from the real app source at `~/Desktop/visionmusicapp`.
 
 ## Structure
@@ -15,9 +15,7 @@ visionmusic-site/
 │       ├── icon-512.png         # store icon (from store_icon_512x512.png)
 │       ├── feature-graphic.png  # Play feature graphic 1024×500
 │       ├── logo-1024.jpg        # in-app logo (1024×1024)
-│       ├── screen-home.png      # real screenshot
-│       ├── screen-library.png
-│       └── screen-discover.png
+│       └── screen-home.png      # real app screenshot
 └── README.md
 ```
 
@@ -47,10 +45,11 @@ python3 -m http.server 5173 --bind 127.0.0.1
 4. **Cloudflare Pages** — direct upload or GitHub connect.
 
 For Google Play Console → Privacy Policy, use:
-`https://<your-host>/privacy.html`
+`https://visionmusic.et/privacy.html`
 
-## Placeholders to replace
+## Production URLs
 
-- `support@visionmusic.app` — switch to a real monitored inbox.
-- `https://visionmusic.app` — replace with the final public URL.
-- Google Play button — set `href` to the real Play Store listing once live.
+- Website: `https://visionmusic.et`
+- Privacy: `https://visionmusic.et/privacy.html`
+- Account deletion: `https://visionmusic.et/delete-account.html`
+- Support: `visionentertainment2020@gmail.com`

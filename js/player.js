@@ -242,3 +242,29 @@ loadTracks().then(()=>{
   updatePlayBtn();
   console.log('Player initialized');
 });
+
+
+// Lyrics modal
+const lyricsBtn = $("lbtn");
+const lyricsModal = $("lmodal");
+const closeBtn = $("cl");
+const lyricsBody = $("lbody");
+
+// Lyrics UI is optional. Keep the player functional on pages that do not
+// include the modal controls.
+if (lyricsBtn && lyricsModal && closeBtn && lyricsBody) {
+  lyricsBtn.addEventListener("click", () => {
+    lyricsModal.classList.toggle("open");
+  });
+
+  closeBtn.addEventListener("click", () => {
+    lyricsModal.classList.remove("open");
+  });
+
+  // Close modal when clicking outside.
+  lyricsModal.addEventListener("click", (e) => {
+    if (e.target === lyricsModal) {
+      lyricsModal.classList.remove("open");
+    }
+  });
+}
