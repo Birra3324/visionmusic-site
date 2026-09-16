@@ -141,6 +141,22 @@ This PR does **not** generate replacement graphics.
 
 ---
 
+## Local verification of this PR
+
+Served with `python3 -m http.server 5173 --bind 127.0.0.1` from the repo root.
+
+| Path | Result |
+| --- | --- |
+| `/`, `/privacy.html`, `/delete-account.html` | HTTP 200 |
+| `/assets/img/icon-512.png`, `feature-graphic.png`, `screen-home.png` | HTTP 200, sizes match git |
+| `/kayo-game/` | HTTP 200 |
+| `/privacy`, `/delete-account` (no `.html`) | **404** on this server (GitHub Pages still serves them over HTTP in production) |
+| In-page `src`/`href` to local files | No missing files |
+
+Browser pass (click, not screenshot-only): home → Privacy (header) → Delete Account (footer) → Privacy (header) → Home; kayo-game still loads. Privacy heading, `com.visionmusic.app`, iOS mention, dates, and deletion link were visible.
+
+---
+
 ## Commands / evidence appendix
 
 ```text
