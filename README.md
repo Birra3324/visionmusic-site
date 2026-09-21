@@ -1,5 +1,7 @@
 # Vision Music — Marketing Site
 
+> Open to remote AI automation roles. Email: birragimedi@gmail.com | GitHub: @Birra3324 | LinkedIn: linkedin.com/in/birra-gemedi
+
 Static landing site for the Vision Music Android and iOS app. Branding and copy are
 pulled from the real app source at `~/Desktop/visionmusicapp`.
 
@@ -9,14 +11,13 @@ pulled from the real app source at `~/Desktop/visionmusicapp`.
 visionmusic-site/
 ├── index.html
 ├── privacy.html
-├── assets/
-│   ├── styles.css
-│   └── img/
-│       ├── icon-512.png         # store icon (from store_icon_512x512.png)
-│       ├── feature-graphic.png  # Play feature graphic 1024×500
-│       ├── logo-1024.jpg        # in-app logo (1024×1024)
-│       └── screen-home.png      # real app screenshot
-└── README.md
+└── assets/
+    ├── styles.css
+    └── img/
+        ├── icon-512.png         # store icon (from store_icon_512x512.png)
+        ├── feature-graphic.png  # Play feature graphic 1024×500
+        ├── logo-1024.jpg        # in-app logo (1024×1024)
+        └── screen-home.png      # real app screenshot
 ```
 
 ## Brand tokens (mirrored from `lib/vision_theme.dart`)
