@@ -3,7 +3,14 @@
 > Open to remote AI automation roles. Email: birragimedi@gmail.com | GitHub: @Birra3324 | LinkedIn: linkedin.com/in/birra-gemedi
 
 Static landing site for the Vision Music Android and iOS app. Branding and copy are
-pulled from the real app source at `~/Desktop/visionmusicapp`.
+pulled from the [Vision Music Flutter app](https://github.com/Birra3324/visionmusicapp).
+
+## KayoBoard
+
+[KayoBoard](kayo-game/) (also called Kayo / Cairo board in notes) is a one-file browser game in this repo: **Kayo vs The Siren Monster**. Collect golden stars and dodge the siren. No install, no account.
+
+- Play: https://visionmusic.et/kayo-game/
+- How to play, controls, and local preview: [kayo-game/README.md](kayo-game/README.md)
 
 ## Structure
 
@@ -11,6 +18,12 @@ pulled from the real app source at `~/Desktop/visionmusicapp`.
 visionmusic-site/
 ├── index.html
 ├── privacy.html
+├── delete-account.html
+├── kayo-game/
+│   ├── index.html             # KayoBoard (single-file canvas game)
+│   └── README.md
+├── docs/
+│   └── status.md
 └── assets/
     ├── styles.css
     └── img/
@@ -20,7 +33,7 @@ visionmusic-site/
         └── screen-home.png      # real app screenshot
 ```
 
-## Brand tokens (mirrored from `lib/vision_theme.dart`)
+## Brand tokens (mirrored from the Vision Music Flutter app, `lib/vision_theme.dart`)
 
 - Gold primary `#C39A4A`
 - Gold light `#D4AA5A`
@@ -31,10 +44,12 @@ visionmusic-site/
 
 ## Preview locally
 
+From the repository root:
+
 ```bash
-cd ~/Desktop/visionmusic-site
 python3 -m http.server 5173 --bind 127.0.0.1
 # open http://127.0.0.1:5173/
+# KayoBoard: http://127.0.0.1:5173/kayo-game/
 ```
 
 ## Publish
@@ -53,4 +68,5 @@ For Google Play Console → Privacy Policy, use:
 - Website: `https://visionmusic.et`
 - Privacy: `https://visionmusic.et/privacy.html`
 - Account deletion: `https://visionmusic.et/delete-account.html`
+- KayoBoard: `https://visionmusic.et/kayo-game/`
 - Support: `visionentertainment2020@gmail.com`
