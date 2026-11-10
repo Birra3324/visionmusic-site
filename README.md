@@ -1,6 +1,6 @@
 # Vision Music — Marketing Site
 
-> Open to remote AI automation roles. Email: birragimedi@gmail.com | GitHub: @Birra3324 | LinkedIn: linkedin.com/in/birra-gemedi
+> Open to remote AI automation roles. Email: birragemedi@gmail.com | GitHub: @Birra3324 | LinkedIn: https://www.linkedin.com/in/birra-gemedi-813337199/
 
 Static landing site for the Vision Music Android and iOS app. Branding and copy are
 pulled from the [Vision Music Flutter app](https://github.com/Birra3324/visionmusicapp).
